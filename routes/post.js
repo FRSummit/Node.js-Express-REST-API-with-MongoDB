@@ -2,15 +2,26 @@ const express = require('express');
 const router = express.Router();
 const Post = require('../models/Post');
 
-router.get('/', (req, res) => {
-    res.send('We are on post');
+// Default get method
+// router.get('/', (req, res) => {
+//     res.send('We are on post');
+// });
+
+// Get the data from db
+router.get('/', async (req, res) => {
+    try {
+        const posts = await Post.find();
+        res.json(posts);
+    } catch(err) {
+        res.json({ message: err });
+    }
 });
 
 router.get('/specfic', (req, res) => {
     res.send('Specfic post');
 });
 
-// request without async, try, catch
+// submit without async, try, catch
 // router.post('/', (req, res) => {
 //     // console.log(req.body);
 //     // res.send(req.body);
@@ -30,7 +41,7 @@ router.get('/specfic', (req, res) => {
 //     // res.send(post);
 // });
 
-// request with async, try, catch
+// submit with async, try, catch
 router.post('/', async (req, res) => {
     const post = new Post({
         title: req.body.title,
