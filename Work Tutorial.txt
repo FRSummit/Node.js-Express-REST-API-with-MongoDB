@@ -104,6 +104,54 @@ module.exports = mongoose.model('Posts', PostSchema);
 ---Step 6------------------------------------------------------------------------------
 >> npm install body-parser
 ---Step 7------------------------------------------------------------------------------
+app.js
+===================
+const express = require('express');
+const app = express();
+const mongoose = require('mongoose');
+const bodyParser = require('body-parser');
+require('dotenv/config');
+
+app.use(bodyParser.json());
+
+//Import Routes
+const postsRoute = require('./routes/post');
+
+app.use('/posts', postsRoute);
+
+//ROUTES
+app.get('/', (req, res) => {
+    res.send('We are on home');
+});
+
+//Connect to DB
+mongoose.connect(process.env.DB_CONNECTION, { useNewUrlParser: true }, () => 
+    console.log('Connect to DB!')
+);
+
+//How to we start listening to the server
+app.listen(3000);
+
+routes/post.js
+===================
+const express = require('express');
+const router = express.Router();
+const Post = require('../models/Post');
+
+router.get('/', (req, res) => {
+    res.send('We are on post');
+});
+
+router.get('/specfic', (req, res) => {
+    res.send('Specfic post');
+});
+
+router.post('/', (req, res) => {
+    console.log(req.body);
+    res.send(req.body);
+});
+
+module.exports = router;
 ---Step 8------------------------------------------------------------------------------
 ---Step 9------------------------------------------------------------------------------
 ---Step 10-----------------------------------------------------------------------------
