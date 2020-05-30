@@ -41,10 +41,68 @@ app.listen(3000);
 >> npm install dotenv
 >> npm install mongoose
 
-mongodb+srv://FRSummit:<password>@restapi-frs-fik92.mongodb.net/test?retryWrites=true&w=majority
+mongodb+srv://FRSummit:<786648>@restapi-frs-fik92.mongodb.net/test?retryWrites=true&w=majority
+
 ---Step 4------------------------------------------------------------------------------
+app.js
+====================
+const express = require('express');
+const app = express();
+const mongoose = require('mongoose');
+require('dotenv/config');
+//Import Routes
+const postsRoute = require('./routes/post');
+
+app.use('/posts', postsRoute);
+
+//ROUTES
+app.get('/', (req, res) => {
+    res.send('We are on home');
+});
+//Connect to DB
+mongoose.connect(process.env.DB_CONNECTION, { useNewUrlParser: true }, () => 
+    console.log('Connect to DB!')
+);
+//How to we start listening to the server
+app.listen(3000);
+
+routes/post.js
+====================
+const express = require('express');
+const router = express.Router();
+
+router.get('/posts', (req, res) => {
+    res.send('We are on post');
+});
+router.get('/specfic', (req, res) => {
+    res.send('Specfic post');
+});
+
+module.exports = router;
+
 ---Step 5------------------------------------------------------------------------------
+models/Post.js
+====================
+const mongoose = require('mongoose');
+
+const PostSchema = mongoose.Schema({
+    title: {
+        type: String,
+        require: true
+    },
+    description: {
+        type: String,
+        require: true
+    },
+    date: {
+        type: Date,
+        default: Date.now
+    }
+});
+
+module.exports = mongoose.model('Posts', PostSchema);
 ---Step 6------------------------------------------------------------------------------
+>> npm install body-parser
 ---Step 7------------------------------------------------------------------------------
 ---Step 8------------------------------------------------------------------------------
 ---Step 9------------------------------------------------------------------------------
